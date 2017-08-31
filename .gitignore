@@ -3,6 +3,5 @@
 *.csproj
 *.sln
 Library/
-ProjectSettings/
 Temp/
 obj/
