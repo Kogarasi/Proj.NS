@@ -16,8 +16,9 @@ namespace NS.Model {
 		
 		public void emit( Type bulletType, Vector2 position ){
 			var bullet = Activator.CreateInstance( bulletType ) as Bullet.BulletBase;
-			var view = createView( bullet );
+			var view = createView( bullet, position );
 			bullet.setView( view );
+			bullet.position = position;
 
 			bulletViewSource.publish( view );
 
@@ -31,9 +32,14 @@ namespace NS.Model {
 			}).ToList();
 		}
 
-		View.BulletView createView( Bullet.BulletBase bullet ){
+		View.BulletView createView( Bullet.BulletBase bullet, Vector2 position ){
 			var prefab = getPrefabFromAttribute( bullet );
-			return (GameObject.Instantiate( prefab ) as GameObject).GetComponent<View.BulletView>();
+			var go = (GameObject.Instantiate( prefab ) as GameObject);
+			var view = go.GetComponent<View.BulletView>();
+
+			go.transform.localPosition = new Vector3( position.x, position.y, 0 );
+
+			return view;
 		}
 	}
 }
