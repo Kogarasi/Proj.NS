@@ -8,6 +8,8 @@ namespace NS.Scene {
 
   [ManageModel( typeof(Model.PlayerModel) )]
   [ManageModel( typeof(Model.BulletModel) )]
+  [ManageModel( typeof(Model.PrefabCacheModel<GameObject>) )]
+  [ManageModel( typeof(Model.BulletCacheModel) )]
   public class MainScene : Sparrow.Scene<MainScene> {
 
     [InjectView("Player")]

@@ -9,6 +9,8 @@ using Sparrow.Rx;
 
 namespace NS.Model {
 	public class BulletModel : Sparrow.Model<BulletModel>, Updatable {
+		Model.PrefabCacheModel<GameObject> prefabCacheModel = Model.PrefabCacheModel<GameObject>.instance;
+		Model.BulletCacheModel bulletCacheModel = Model.BulletCacheModel.instance;
 		
 		public Subject<View.BulletView> bulletViewSource = new Subject<View.BulletView>();
 
@@ -28,16 +30,26 @@ namespace NS.Model {
 		public void update(){
 			bullets = bullets.Where((bullet)=>{
 				bullet.move();
+				if( bullet.isDirty() ){
+					bulletCacheModel.push( bullet.view );
+					return false; // remove from list
+				}
 				return true;
 			}).ToList();
 		}
 
 		View.BulletView createView( Bullet.BulletBase bullet, Vector2 position ){
-			var prefab = getPrefabFromAttribute( bullet );
-			var go = (GameObject.Instantiate( prefab ) as GameObject);
-			var view = go.GetComponent<View.BulletView>();
 
-			go.transform.localPosition = new Vector3( position.x, position.y, 0 );
+			var view = bulletCacheModel.pop( bullet.viewType );
+			if( view == null ){
+
+				var path = getPrefabPathFromAttribute( bullet );
+				var prefab = prefabCacheModel.get(path);
+				var go = (GameObject.Instantiate( prefab ) as GameObject);
+				view = go.GetComponent<View.BulletView>();
+			}
+
+			view.transform.localPosition = new Vector3( position.x, position.y, 0 );
 
 			return view;
 		}

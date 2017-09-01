@@ -7,7 +7,6 @@ namespace NS.View {
 	public class BulletContainerView : Sparrow.View {
 		Model.BulletModel bulletModel = Model.BulletModel.instance;
 		public static BulletContainerView instance;
-		List<BulletView> children = new List<BulletView>();
 		
 		Observer<BulletView> observer;
 
@@ -26,7 +25,6 @@ namespace NS.View {
 
 		public void addChild( BulletView child ){
 			child.transform.SetParent( transform, false );
-			children.Add( child );
 		}
 	}
 }
