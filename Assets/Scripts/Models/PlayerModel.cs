@@ -8,6 +8,7 @@ namespace NS.Model {
   public class PlayerModel: Sparrow.Model<PlayerModel>, Updatable {
     Model.BulletModel bulletModel = Model.BulletModel.instance;
 
+    public Variable<int> life = new Variable<int>( 100 );
     public Variable<float> speed = new Variable<float>( Config.normalSpeed );
     public Variable<Vector2> position = new Variable<Vector2>( Vector2.zero );
 
@@ -29,7 +30,11 @@ namespace NS.Model {
       this.isEmit = state;
     }
     public void move( Vector2 moveRawDelta ){
-      position.value = position.value + (speed.value * moveRawDelta);
+      var newPosition = position.value + (speed.value * moveRawDelta);
+      newPosition.x = Mathf.Clamp( newPosition.x, -350, 350 );
+      newPosition.y = Mathf.Clamp( newPosition.y, -625, 625 );
+
+      position.value = newPosition;
     }
   }
 }

@@ -7,10 +7,11 @@ namespace NS.Bullet {
 
 	[Prefab( "Prefabs/Bullets/NormalBullet" )]
 	public class NormalBullet : Bullet<NormalBullet, View.NormalBulletView> {
+		const float bulletSpd = 2f;
 
 		public override void move(){
-			position = position + new Vector2( 0, 1 );
-			view.transform.Translate( 0, 1, 0 );
+			position = position + new Vector2( 0, bulletSpd );
+			view.transform.Translate( 0, bulletSpd, 0 );
 		}
 
 		public override bool isDirty(){

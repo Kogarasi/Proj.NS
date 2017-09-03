@@ -11,14 +11,9 @@ namespace NS.Scene {
   [ManageModel( typeof(Model.PrefabCacheModel<GameObject>) )]
   [ManageModel( typeof(Model.BulletCacheModel) )]
   public class MainScene : Sparrow.Scene<MainScene> {
-
-    [InjectView("Player")]
-    public View.PlayerView playerView;
-
-    [InjectView("Touch")]
-    public View.TouchView touchView;
-
-    [InjectView("Bullet Container")]
-    public View.BulletContainerView bulletContainerView;
+    public new void Start(){
+      base.Start();
+      Application.targetFrameRate = 60;
+    }
   }
 }
