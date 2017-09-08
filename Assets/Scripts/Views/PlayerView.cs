@@ -8,7 +8,7 @@ namespace NS.View {
 	public class PlayerView : Sparrow.View {
 		Model.PlayerModel playerModel = Model.PlayerModel.instance;
 		Observer<Vector2> observer;
-		public void Start(){
+		public void Start(){			
 			observer = playerModel.position.subscribe((position)=>{
 				transform.localPosition = new Vector3( position.x, position.y, 0 );
 			});

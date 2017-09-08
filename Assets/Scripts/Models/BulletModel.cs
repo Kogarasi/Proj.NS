@@ -9,44 +9,35 @@ using Sparrow.Rx;
 
 namespace NS.Model {
 	public class BulletModel : Sparrow.Model<BulletModel>, Updatable {
-		Model.PrefabCacheModel<GameObject> prefabCacheModel = Model.PrefabCacheModel<GameObject>.instance;
+		Model.PrefabCacheModel prefabCacheModel = Model.PrefabCacheModel.instance;
 		Model.BulletCacheModel bulletCacheModel = Model.BulletCacheModel.instance;
-		
-		public Subject<View.BulletView> bulletViewSource = new Subject<View.BulletView>();
-
-		List<Bullet.BulletBase> bullets = new List<Bullet.BulletBase>();
-		
+		List<View.Bullet.BulletView> bullets = new List<View.Bullet.BulletView>();
+	
 		public void emit( Type bulletType, Vector2 position ){
-			var bullet = Activator.CreateInstance( bulletType ) as Bullet.BulletBase;
-			var view = createView( bullet, position );
-			bullet.setView( view );
-			bullet.position = position;
-
-			bulletViewSource.publish( view );
-
-			bullets.Add( bullet );
+			var view = createView( bulletType, position );
+			bullets.Add( view );
 		}
 
 		public void update(){
 			bullets = bullets.Where((bullet)=>{
 				bullet.move();
 				if( bullet.isDirty() ){
-					bulletCacheModel.push( bullet.view );
-					return false; // remove from list
+					bulletCacheModel.push( bullet );
+					return false;
 				}
 				return true;
 			}).ToList();
 		}
 
-		View.BulletView createView( Bullet.BulletBase bullet, Vector2 position ){
+		View.Bullet.BulletView createView( Type type, Vector2 position ){
 
-			var view = bulletCacheModel.pop( bullet.viewType );
+			var view = bulletCacheModel.pop( type );
 			if( view == null ){
 
-				var path = getPrefabPathFromAttribute( bullet );
+				var path = getPrefabPathFromAttribute( type );
 				var prefab = prefabCacheModel.get(path);
-				var go = (GameObject.Instantiate( prefab ) as GameObject);
-				view = go.GetComponent<View.BulletView>();
+				var go = GameObject.Instantiate( prefab, View.Container.BulletContainerView.instance.transform, false ) as GameObject;
+				view = go.GetComponent<View.Bullet.BulletView>();
 			}
 
 			view.transform.localPosition = new Vector3( position.x, position.y, 0 );

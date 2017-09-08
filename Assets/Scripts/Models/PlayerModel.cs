@@ -10,7 +10,7 @@ namespace NS.Model {
 
     public Variable<int> life = new Variable<int>( 100 );
     public Variable<float> speed = new Variable<float>( Config.normalSpeed );
-    public Variable<Vector2> position = new Variable<Vector2>( Vector2.zero );
+    public Variable<Vector2> position = new Variable<Vector2>( Config.initialPlayerPosition );
 
     bool isEmit = false;
     int emitWaitCounter = 0;
@@ -22,7 +22,7 @@ namespace NS.Model {
 
       if( isEmit && emitWaitCounter == 0 ){
         emitWaitCounter = 30;
-        bulletModel.emit( typeof(Bullet.NormalBullet), position.value );
+        bulletModel.emit( typeof(View.Bullet.NormalBulletView), position.value );
       }
     }
 

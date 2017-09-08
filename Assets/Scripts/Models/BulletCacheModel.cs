@@ -6,9 +6,9 @@ using UnityEngine;
 
 namespace NS.Model {
 	public class BulletCacheModel : Sparrow.Model<BulletCacheModel> {
-		Dictionary<Type, List<View.BulletView>> cacheData = new Dictionary<Type, List<View.BulletView>>();
+		Dictionary<Type, List<View.Bullet.BulletView>> cacheData = new Dictionary<Type, List<View.Bullet.BulletView>>();
 
-		public View.BulletView pop( Type viewType ){
+		public View.Bullet.BulletView pop( Type viewType ){
 			if( !cacheData.ContainsKey(viewType) ){
 				return null;
 			}
@@ -24,12 +24,12 @@ namespace NS.Model {
 			}
 		}
 
-		public void push( View.BulletView view ){
+		public void push( View.Bullet.BulletView view ){
 			view.gameObject.SetActive( false );
 
 			var viewType = view.GetType();
 			if( !cacheData.ContainsKey( viewType ) ){
-				cacheData[ viewType ] = new List<View.BulletView>();
+				cacheData[ viewType ] = new List<View.Bullet.BulletView>();
 			}
 
 			cacheData[ viewType ].Add( view );
